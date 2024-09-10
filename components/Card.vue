@@ -1,49 +1,16 @@
 <script setup>
-import { ref } from "vue";
-
 defineProps({
-  user : {
+  user: {
     image: String,
     title: String,
     bio: String,
   },
-  isBehind: Boolean
 });
-
-const swipeLeft = ref(false);
-const swipeRight = ref(false);
-const startX = ref(0);
-const deltaX = ref(0);
-
-function handleTouchStart(event) {
-  startX.value = event.touches[0].clientX;
-}
-
-function handleTouchMove(event) {
-  deltaX.value = event.touches[0].clientX - startX.value;
-  if (deltaX.value > 50) {
-    swipeRight.value = true;
-  } else if (deltaX.value < -50) {
-    swipeLeft.value = true;
-  }
-}
-
-
-
 </script>
 
 <template>
-  <div
-    class="card-container"
-    :class="{ 'glass-effect_ennabled': isBehind , 'behind': isBehind }"
-    @touchstart="handleTouchStart"
-    @touchmove="handleTouchMove"
-  >
-  <div v-if="isBehind" class="card__glush" ></div>
-    <div
-      class="card"
-      :class="{ 'swipe-left': swipeLeft, 'swipe-right': swipeRight, 'glass-effect_ennabled': isBehind   }"
-    >
+  <div class="card-container">
+    <div class="card">
       <img class="card__image" :src="user.image" alt="Image" />
       <div class="card__info glass-effect">
         <h2 class="card__name">{{ user.name }}</h2>
@@ -71,14 +38,7 @@ function handleTouchMove(event) {
 .glass-effect > * {
   filter: none; /* prevent the blur effect from affecting the text */
 }
-.glass-effect_ennabled{
-  background: rgba(255, 255, 255, 0.3); /* translucent white background */
-  backdrop-filter: blur(15px); /* blur the background */
-  -webkit-backdrop-filter: blur(15px); /* for Safari and Chrome */ /* rounded corners *//* add some padding */
-  background: inherit;
-}
-//
-
+// ВЫНЕСТИ В ПЛАГИНЫ
 .card-container {
   z-index: 5;
   border: 1px solid red;
@@ -89,7 +49,7 @@ function handleTouchMove(event) {
   opacity: 1;
 }
 .card-container.behind {
-  opacity: .7;
+  opacity: 0.7;
   position: absolute;
   z-index: 0; /* card behind */
   pointer-events: none; /* make it unclickable */
@@ -113,8 +73,10 @@ function handleTouchMove(event) {
     height: 100%;
     position: absolute;
     background: rgba(255, 255, 255, 0.3); /* translucent white background */
-  backdrop-filter: blur(15px); /* blur the background */
-  -webkit-backdrop-filter: blur(15px); /* for Safari and Chrome */ /* rounded corners *//* add some padding */
+    backdrop-filter: blur(15px); /* blur the background */
+    -webkit-backdrop-filter: blur(
+      15px
+    ); /* for Safari and Chrome */ /* rounded corners */ /* add some padding */
   }
 
   &__image {
@@ -142,7 +104,7 @@ function handleTouchMove(event) {
   &__desc {
     margin-bottom: 12px;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* display at least 4 lines */
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     font-size: 18px;
     width: 100%;
@@ -151,13 +113,5 @@ function handleTouchMove(event) {
     text-overflow: ellipsis;
     white-space: normal;
   }
-}
-
-.card.swipe-left {
-  transform: translateX(-100%);
-}
-
-.card.swipe-right {
-  transform: translateX(100%);
 }
 </style>
